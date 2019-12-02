@@ -41,6 +41,7 @@ int main()
 
 double minI,maxI,minR,maxR; 
 int maxN =1000;
+
 int x = gfx_xsize() / 2;
 int y = gfx_ysize() / 2;
 int dx = 1;
@@ -94,9 +95,9 @@ else
 	{
 		for(int x =0; x<gfx_xsize(); x++)
 		{
-			double cr = mapToReal(x, gfx_xsize,minI, maxI);
-			double ci = mapToImaginary(y, gfx_ysize,minI, maxI);
-			int n = mandelbrotSet(cr,ci,maxN);
+			double cr =  mapToReal(x, gfx_xsize,minR, maxR);
+			double ci =  mapToImaginary(y, gfx_ysize,minI, maxI);
+			int n = mandelbrotSet(<cr,ci>,maxN);
 			gfx_color(n % 255, n % 255, n % 255);
 		}
 	}
