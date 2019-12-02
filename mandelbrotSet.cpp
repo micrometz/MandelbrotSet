@@ -1,53 +1,52 @@
 #include <iostream>
 #include <cmath>
 #include <unistd.h>
- extern "c"
+#include <complex>
+ extern "C"
 {
 #include "gfx.h"
 }
-mandelbroSet(double left, double top, float xside, float yside)
-{
-double xscale, yscale, zx,zy,cx,temp,cy;
-int x,y,i,j;
-int xmax, ymax, count;
-const maxcount = 30;
-Xmax=getxmax;
-ymax=getymax;
-xscale = xside/xmax;
-yscale = yside/ymax;
 
-for(y=1; y <= ymax-1;y++)
+template<typename _Tp> class complex<double>;
+
+int mandelbrotSet(complex<double> c , int max_iterations)
 {
-	for(x=1; x <= xmax-1; x++)
-	{
-		cx = x*xscale + left;
-		cy = y*yscale = top;
-		zy = 0;
-		count =0;
-	while((4>zx*zx+zy*zy) && (count < maxcount))//calculate the mandelgrot set
-		{
-		temp=zx*zx = zy-zy +cx;
-		zy=2*zx*zy+cy;
-		zx=temp;
-		count++;
-		}
-	gfx_point(zx,zy);
-	}
+int i = 0;
+std::complex<double> z =0;
+while(i <= max_iterations && norm(z) < 4)
+{
+z*=z;
+z+=c;
+i++;
 }
- 
+return i;
+}
+
+double mapToReal(int x, int gfx_xsize, double minR, double maxR)
+{
+	    double range = maxR - minR;
+	        return x * (range /gfx_xsize) + minR;
+}
+
+double mapToImaginary(int y, int gfx_xsize, double minI, double maxI)
+{
+	    double range = maxI - minI;
+	        return y * (range / gfx_xsize) + minI;
+
 }
 
 
 int main()
 {
 
-
-gfx_open(500, 500, "mandelbrotSets");
+double minI,maxI,minR,maxR; 
+int maxN =1000;
 int x = gfx_xsize() / 2;
-int y = gfxysize() / 2;
+int y = gfx_ysize() / 2;
 int dx = 1;
 int dy = 1;
 
+gfx_open(500, 500, "mandelbrotSets");
 while(true)
 {
 	
@@ -91,7 +90,17 @@ else
 	usleep(10000);
 	// update the drawing
 	
-	draw_state(x, y);
+	for(int y =0;y<gfx_ysize();y++)
+	{
+		for(int x =0; x<gfx_xsize(); x++)
+		{
+			double cr = mapToReal(x, gfx_xsize,minI, maxI);
+			double ci = mapToImaginary(y, gfx_ysize,minI, maxI);
+			int n = mandelbrotSet(cr,ci,maxN);
+			gfx_color(n % 255, n % 255, n % 255);
+		}
+	}
 }
 return 0;
+}
 }
