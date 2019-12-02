@@ -1,0 +1,49 @@
+#include <iostream>
+#include <cmath>
+#include <unistd.h>
+ extern "c"
+{
+#include "gfx.h"
+}
+mandelbroSet(double left, double top, float xside, float yside)
+{
+double xscale, yscale, zx,zy,cx,temp,cy;
+int x,y,i,j;
+int xmax, ymax, count;
+const maxcount = 30;
+Xmax=getxmax;
+ymax=getymax;
+xscale = xside/xmax;
+yscale = yside/ymax;
+
+gfx_open(500, 500, "mandelbrotSets");
+
+for(y=1; y <= ymax-1;y++)
+{
+	for(x=1; x <= xmax-1; x++)
+	{
+		cx = x*xscale + left;
+		cy = y*yscale = top;
+		zy = 0;
+		count =0;
+	while((4>zx*zx+zy*zy) && (count < maxcount))//calculate the mandelgrot set
+		{
+		temp=zx*zx = zy-zy +cx;
+		zy=2*zx*zy+cy;
+		zx=temp;
+		count++;
+		}
+	//draw pex
+	}
+}
+int main()
+{
+
+
+while(true)
+{
+
+
+}
+}
+
